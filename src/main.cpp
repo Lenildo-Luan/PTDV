@@ -6,7 +6,7 @@
 #include "../include/data.hpp"
 
 int main(){
-	Data data("./instance.txt");
+	Data data("../instances/proj1.txt");
 	data.printData();
 	return 0;
 }
