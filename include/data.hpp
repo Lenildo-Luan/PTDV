@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 struct Data{
 	// Matriz de custo da tarefa j executando no tipo e
@@ -17,8 +18,10 @@ struct Data{
 
 	std::string name_instance;
 	std::string path;
+	
 	Data(std::string path_to_instance);
 	void printData();
+
 	private:
 	FILE* fp;
 	void readInstance();

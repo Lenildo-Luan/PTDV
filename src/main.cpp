@@ -6,7 +6,10 @@
 #include "../include/data.hpp"
 
 int main(){
-	Data data("../instances/proj1.txt");
+	std::string path = "./instances/proj1.txt";
+	
+	Data data(path);
 	data.printData();
+	
 	return 0;
 }

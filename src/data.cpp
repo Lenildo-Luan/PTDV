@@ -59,9 +59,11 @@ void Data::readInstance(){
 Data::Data(std::string path_to_instance){
 	this->path = path_to_instance;
 	this->fp = fopen(path_to_instance.data(), "r");
+
 	if(!fp){
 		throw "Error when opening instance file!";
 	}
+	
 	readInstance();
 }
 
