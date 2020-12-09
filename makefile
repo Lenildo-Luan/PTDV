@@ -1,9 +1,18 @@
+CPLEX_VERSION = 12.7
 # detecta se o sistema é de 32 ou 64 bits
 N_BITS = $(shell getconf LONG_BIT)
 
 SYSTEM = x86-64_linux
 
 LIBFORMAT = static_pic
+
+#### diretorios com as libs do cplex
+CPLEXDIR  = /opt/ibm/ILOG/CPLEX_Studio1210/cplex
+CONCERTDIR = /opt/ibm/ILOG/CPLEX_Studio1210/concert
+
+CPLEXLIBDIR   = $(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
+CONCERTLIBDIR = $(CONCERTDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
+
 #### define o compilador
 CPPC = g++
 #############################
@@ -19,14 +28,16 @@ INCLUDEDIR = include
 # -fPIC generate position independent code for shared libraries
 # -w disable warning (-Wall to enable all warnings and -Wextra to enable extra warnings)
 # -DIL_STD to enable some STL features used by cplex
-CCOPT = -g -std=c++17 
-CCFLAGS = -I$(INCLUDEDIR)
+CCOPT = -g -O0 -fPIC -w -Wl,--gc-sections -ffunction-sections -g -DIL_STD -std=c++17 
+CONCERTINCDIR = $(CONCERTDIR)/include
+CPLEXINCDIR   = $(CPLEXDIR)/include
+CCFLAGS = $(CCOPT) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) -I$(INCLUDEDIR)
 #############################
 
 #### flags do linker
 #CCLNFLAGS = -L$(CPLEXLIBDIR) -lilocplex -lcplex -L$(CONCERTLIBDIR) -lconcert -lm -lpthread -lGL -lGLU -lglut -lboost_program_options
 
-CCLNFLAGS = -g -lm -lpthread -ldl 
+CCLNFLAGS = -g  -L$(CPLEXLIBDIR) -lilocplex -lconcert -lcplex -L$(CONCERTLIBDIR) -lm -lpthread -ldl 
 #############################
 
 
@@ -36,7 +47,7 @@ OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 #############################
 
 #### regra principal, gera o executavel
-model: $(OBJS) 
+pfm: $(OBJS) 
 	@echo  "\033[31m \nLinking all objects files: \033[0m"
 	$(CPPC) $(OBJS) $(OBJSUTILS) -o $@ $(CCLNFLAGS)
 ############################
@@ -60,9 +71,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 clean:
 	@echo "\033[31mcleaning obj directory \033[0m"
 	@rm -f $(OBJDIR)/*.o $(OBJDIR)/*.d
-	@rm model
+	@rm pfm
 
 dirs:
 	@mkdir $(OBJDIR)
 
-rebuild: clean model
+rebuild: clean pfm

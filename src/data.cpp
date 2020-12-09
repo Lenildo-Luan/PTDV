@@ -25,29 +25,39 @@ void Data::printData(){
 void Data::readInstance(){
 	char aux_c[64] = "";
 	int aux_i = 0, aux_i2 = 0;
+
 	fscanf(fp, "NAME : %s\n", aux_c);
 	this->name_instance = std::string(aux_c);
+
 	fscanf(fp, "SIZE : %i\n", &aux_i);
 	this->n = aux_i;
+
 	fscanf(fp, "DEADLINE : %i\n", &aux_i);
 	this->D = aux_i;
+
 	fscanf(fp, "FINE : %i\n", &aux_i);
 	fscanf(fp, "NODE_DURATION\n");
+
 	this->M = aux_i;
+
 	this->Tau = std::vector<std::vector<int>>(this->n, std::vector<int>(3, 0));
 	for(int t = 0; t < 3; t++){
 		for(int j = 0; j < this->n; j++){
 			fscanf(fp, "%d", &this->Tau[j][t]);
 		}
 	}
+
 	fscanf(fp, "\nNODE_COST\n");
+
 	this->C = std::vector<std::vector<int>>(this->n, std::vector<int>(3, 0));
 	for(int t = 0; t < 3; t++){
 		for(int j = 0; j < this->n; j++){
 			fscanf(fp, "%d", &this->C[j][t]);
 		}
 	}
+
 	fscanf(fp, "\nPRECEDENCE\n");
+	
 	this->precedence = std::vector<std::pair<int, int>>(n, std::make_pair(0,0));
 	for(int i = 0; i < n; i++){
 		fscanf(fp, "%d %d\n", &aux_i, &aux_i2);
@@ -66,4 +76,4 @@ Data::Data(std::string path_to_instance){
 	
 	readInstance();
 }
-
+Data::~Data(){}

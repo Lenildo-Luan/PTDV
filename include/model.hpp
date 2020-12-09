@@ -7,13 +7,11 @@
 #include <string>
 #include <string.h>
 #include <ilcplex/ilocplex.h> 
-#include <data.hpp>
+#include "./data.hpp"
 
 struct Model {
-    int size, deadline, fine;
-    std::vector< std::vector<int> > nodeDurationsMatrix, nodeCostMatrix, precedenceMatrix;
-
-    IloArray<IloNumVarArray> x;
+    int typesOfTasks;
+    IloArray< IloBoolVarArray > x;
     
     IloModel _model;
     IloCplex _cplex;
@@ -24,10 +22,10 @@ struct Model {
     void solve();
     void generateDot();
 
-    private:
+private:
     void addObjFunction();
     void addVariables();
     void addConstraints(); 
     void initCplexFromModel();
     void initData();
-}
+};

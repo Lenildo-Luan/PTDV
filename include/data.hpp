@@ -20,6 +20,8 @@ struct Data{
 	std::string path;
 	
 	Data(std::string path_to_instance);
+    Data(){};
+    ~Data();
 	void printData();
 
 	private:
