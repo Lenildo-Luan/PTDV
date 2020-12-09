@@ -47,7 +47,7 @@ OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 #############################
 
 #### regra principal, gera o executavel
-pfm: $(OBJS) 
+PDTV: $(OBJS) 
 	@echo  "\033[31m \nLinking all objects files: \033[0m"
 	$(CPPC) $(OBJS) $(OBJSUTILS) -o $@ $(CCLNFLAGS)
 ############################
@@ -71,9 +71,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 clean:
 	@echo "\033[31mcleaning obj directory \033[0m"
 	@rm -f $(OBJDIR)/*.o $(OBJDIR)/*.d
-	@rm pfm
+	@rm PDTV
 
 dirs:
 	@mkdir $(OBJDIR)
 
-rebuild: clean pfm
+rebuild: clean PDTV
