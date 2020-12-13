@@ -28,4 +28,6 @@ private:
     void addConstraints(); 
     void initCplexFromModel();
     void initData();
+    void topsort(int v, std::vector<int>& visited, std::vector<std::vector<int>>& graph, std::vector<int>&result);
+    std::vector<int> getOrder(Data data);
 };

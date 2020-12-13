@@ -5,7 +5,6 @@
 ### C++ ###
 # Prerequisites
 *.d
-*.exe
 
 # Compiled Object files
 *.slo
@@ -38,5 +37,3 @@
 *.app
 
 # End of https://www.toptal.com/developers/gitignore/api/c++
-
-.vscode

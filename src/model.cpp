@@ -82,23 +82,75 @@ void Model::solve(){
     }
 
     std::cout << "status: " << this->_cplex.getStatus() << std::endl;
-    std::cout << "FO: " << _cplex.getObjValue() << std::endl;
-    std::cout << "x: " << std::endl;
+    std::cout << "Cronograma: " << std::endl;
 
-    int resultado = 0, dias = 0;
+    std::vector<int> result = getOrder(_data);
+    std::reverse(result.begin(), result.end());
+    int totalTime = 0, taskCost = 0;
 
-    for(int i = 0; i < _data.n; i++){
-        for(int j = 0; j < typesOfTasks; j++){
-            resultado +=  _cplex.getValue(x[i][j]) * _data.C[i][j];
-            dias +=  _cplex.getValue(x[i][j]) * _data.Tau[i][j];
-            std::cout << _cplex.getValue(x[i][j]) << " ";
+    for(int i = 0; i < result.size(); i++){
+        std::cout << "Tarefa ";
+        for (int j = 0; j < 3; j++){
+            if(_cplex.getValue(x[i][j])){
+                totalTime += _data.Tau[i][j];
+                taskCost += _data.C[i][j];
+                std::cout << result[i] + 1 << " - " << _data.Tau[i][j] << " dias - " << "R$ " <<  _data.C[i][j] << std::endl;   
+            }
         }
-        std::cout << std::endl;
     }
 
-    std::cout << resultado + (dias - _data.D) * _data.M << std::endl;
+    std::cout << "Tempo total do projeto: " << totalTime << " dias" << std::endl;
+    std::cout << "Custo com multa: R$ " << (totalTime - _data.D) * _data.M << std::endl;
+    std::cout << "Custo com tarefas: R$ " << taskCost << std::endl;
+    std::cout << "Custo total do projeto: R$ " << _cplex.getObjValue() << std::endl;
+
+    std::cout << std::endl;
+
+    // int resultado = 0, dias = 0;
+
+    // for(int i = 0; i < _data.n; i++){
+    //     for(int j = 0; j < typesOfTasks; j++){
+    //         resultado +=  _cplex.getValue(x[i][j]) * _data.C[i][j];
+    //         dias +=  _cplex.getValue(x[i][j]) * _data.Tau[i][j];
+    //         std::cout << _cplex.getValue(x[i][j]) << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
+
+    // std::cout << resultado + (dias - _data.D) * _data.M << std::endl;
     
 }
-void Model::generateDot(){
-
+void Model::topsort(int v, std::vector<int>& visited, std::vector<std::vector<int>>& graph, std::vector<int>&result)
+{
+    visited[v] = 1;
+    for (int u = 0; u < graph.size(); ++u) {
+        if (!visited[u] && graph[v][u]) {
+            topsort(u, visited, graph, result);
+        }
+    }
+        result.push_back(v);
+}
+std::vector<int> Model::getOrder(Data data){
+    std::vector<std::vector<int>> graph(data.n, std::vector<int>(data.n, 0));
+    for(int i = 0; i < data.precedence.size(); i++){
+        int a=data.precedence[i].first;
+        int b=data.precedence[i].second;
+        graph[a-1][b-1]=1;
+    }
+    std::vector<int> result(0,0);
+    std::vector<int> visited(data.n, 0);
+    for(int i = 0; i < data.n; i++){
+        topsort(i, visited, graph, result);
+        int AnyoneIsMissing=0;
+        for(int j = 0; j < data.n; j++){
+            if(!visited[j]){
+                AnyoneIsMissing = true;
+                break;
+                }
+        }
+        if(!AnyoneIsMissing){
+            break;
+        }
+    }
+    return result;
 }
