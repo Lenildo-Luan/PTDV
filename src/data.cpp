@@ -1,7 +1,7 @@
 #include "../include/data.hpp"
 
 void Data::printData(){
-	printf("n:%d D:%d M:%d\n", n, D, M);
+	printf("n:%d D:%d M:%d pls:%d\n", n, D, M, precendence_list_size);
 	// Matriz de custo da tarefa j executando no tipo e
 	for(int t = 0; t < 3; t++){
 		for(int j = 0; j < n; j++){
@@ -25,41 +25,33 @@ void Data::printData(){
 void Data::readInstance(){
 	char aux_c[64] = "";
 	int aux_i = 0, aux_i2 = 0;
-
 	fscanf(fp, "NAME : %s\n", aux_c);
 	this->name_instance = std::string(aux_c);
-
 	fscanf(fp, "SIZE : %i\n", &aux_i);
 	this->n = aux_i;
-
 	fscanf(fp, "DEADLINE : %i\n", &aux_i);
 	this->D = aux_i;
-
 	fscanf(fp, "FINE : %i\n", &aux_i);
-	fscanf(fp, "NODE_DURATION\n");
-
 	this->M = aux_i;
-
+	fscanf(fp, "PRECEDENCE_LIST_SIZE : %i\n", &aux_i);
+	this->precendence_list_size = aux_i;
+	fscanf(fp, "NODE_DURATION\n");
 	this->Tau = std::vector<std::vector<int>>(this->n, std::vector<int>(3, 0));
 	for(int t = 0; t < 3; t++){
 		for(int j = 0; j < this->n; j++){
 			fscanf(fp, "%d", &this->Tau[j][t]);
 		}
 	}
-
 	fscanf(fp, "\nNODE_COST\n");
-
 	this->C = std::vector<std::vector<int>>(this->n, std::vector<int>(3, 0));
 	for(int t = 0; t < 3; t++){
 		for(int j = 0; j < this->n; j++){
 			fscanf(fp, "%d", &this->C[j][t]);
 		}
 	}
-
-	fscanf(fp, "\nPRECEDENCE\n");
-	
-	this->precedence = std::vector<std::pair<int, int>>(n, std::make_pair(0,0));
-	for(int i = 0; i < n; i++){
+	fscanf(fp, "\nPRECEDENCE_LIST\n");
+	this->precedence = std::vector<std::pair<int, int>>(precendence_list_size, std::make_pair(0,0));
+	for(int i = 0; i < precendence_list_size; i++){
 		fscanf(fp, "%d %d\n", &aux_i, &aux_i2);
 		precedence[i] = std::make_pair(aux_i, aux_i2);
 	}
@@ -69,11 +61,9 @@ void Data::readInstance(){
 Data::Data(std::string path_to_instance){
 	this->path = path_to_instance;
 	this->fp = fopen(path_to_instance.data(), "r");
-
 	if(!fp){
 		throw "Error when opening instance file!";
 	}
-	
 	readInstance();
 }
-Data::~Data(){}
+

@@ -100,25 +100,11 @@ void Model::solve(){
     }
 
     std::cout << "Tempo total do projeto: " << totalTime << " dias" << std::endl;
-    std::cout << "Custo com multa: R$ " << (totalTime - _data.D) * _data.M << std::endl;
+    std::cout << "Custo com multa: R$ " << (((totalTime - _data.D) * _data.M) < 0 ? 0 : ((totalTime - _data.D) * _data.M)) << std::endl;
     std::cout << "Custo com tarefas: R$ " << taskCost << std::endl;
-    std::cout << "Custo total do projeto: R$ " << _cplex.getObjValue() << std::endl;
+    std::cout << "Custo total do projeto: R$ " << (((totalTime - _data.D) * _data.M) < 0 ? taskCost : _cplex.getObjValue()) << std::endl;
 
-    std::cout << std::endl;
-
-    // int resultado = 0, dias = 0;
-
-    // for(int i = 0; i < _data.n; i++){
-    //     for(int j = 0; j < typesOfTasks; j++){
-    //         resultado +=  _cplex.getValue(x[i][j]) * _data.C[i][j];
-    //         dias +=  _cplex.getValue(x[i][j]) * _data.Tau[i][j];
-    //         std::cout << _cplex.getValue(x[i][j]) << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
-
-    // std::cout << resultado + (dias - _data.D) * _data.M << std::endl;
-    
+    std::cout << std::endl;    
 }
 void Model::topsort(int v, std::vector<int>& visited, std::vector<std::vector<int>>& graph, std::vector<int>&result)
 {
