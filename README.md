@@ -20,7 +20,7 @@ A instância do PTDV encontra-se na pasta `./include` e foi montada a partir dos
 
 ## Compilando e executando
 
-Para compilar o programa, basta utilizar o comando `make` pelo terminal na pasta raiz, gerando o arquivo executável `PTDV`. Basta executar o arquivo gerado para visualizar o resultado.
+Para compilar o programa, basta utilizar o comando `make` pelo terminal na pasta raiz, gerando o arquivo executável `PTDV`. Basta executar o arquivo gerado para visualizar o resultado. Ao executar, é gerado um arquivo `.lp` onde contêm várias informações a respeito do modelo matemático.
 
 ``` bash
 ./PTDV
